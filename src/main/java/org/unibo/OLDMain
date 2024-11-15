@@ -1,0 +1,88 @@
+package org.example;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class OLDMain {
+    private static OLDMain instance = new OLDMain();
+    private static JLabel label;
+    private static JButton button;
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+        JFrame frame = new JFrame("Hello, World!");
+        frame.setSize(500, 500);
+
+
+        
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(true);
+        frame.setLayout(null);
+
+        label = new JLabel("Hello, World!");
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setBounds(0, 0, 300, 300);
+        frame.add(label);
+
+        // add a button
+        button = new JButton("Click me!");
+        button.setBounds(100, 100, 100, 50);
+        frame.add(button);
+        // change color of the button
+        button.setBackground(new java.awt.Color(0, 255, 0));
+        JTextField textField = new JTextField();
+        textField.setBounds(100, 200, 100, 50);
+        frame.add(textField);
+        textField.setVisible(true);
+        // add an action listener to the button
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                instance.buttonClicked();
+            }
+        });
+
+        // print every event you do
+        frame.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                System.out.println("Mouse clicked!");
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                System.out.println("Mouse entered!");
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                System.out.println("Mouse exited!");
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                System.out.println("Mouse pressed!");
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                System.out.println("Mouse released!");
+            }
+        });
+
+        // put blue color while the button is hover
+        button.getModel().addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                if (button.getModel().isRollover()) {
+                    button.setBackground(new java.awt.Color(0, 0, 255));
+                } else {
+                    button.setBackground(new java.awt.Color(0, 255, 0));
+                }
+            }
+        });
+    }
+
+    // when the button is clicked, this method will be called
+    public void buttonClicked() {
+        System.out.println("Button clicked!");
+        // change the text of the label
+        if (label.getText().equals("Button clicked!")) {
+            System.out.println("Label text changed!");
+            label.setText("Label text changed!");
+        } else {
+            System.out.println("Button clicked!");
+            label.setText("Button clicked!");
+        }
+    }
+}
