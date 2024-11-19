@@ -1,8 +1,8 @@
 plugins {
-    id("java")
+    java
 }
 
-group = "unibo.main"
+group = "org.example"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -10,10 +10,16 @@ repositories {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("junit:junit:4.12")
 }
 
-tasks.test {
-    useJUnitPlatform()
+sourceSets {
+    main {
+        java {
+            setSrcDirs(listOf("src/main/java"))
+        }
+        resources {
+            setSrcDirs(listOf("src/main/assets"))
+        }
+    }
 }

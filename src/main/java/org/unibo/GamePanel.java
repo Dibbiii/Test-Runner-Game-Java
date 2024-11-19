@@ -1,101 +1,134 @@
 package org.unibo;
 
-
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import org.unibo.entity.Player;
+import org.unibo.handler.KeyboardHandler;
+import org.unibo.handler.MouseHandler;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
-public class GamePanel extends JPanel implements Runnable {
-    final int originalTileSize = 16; // 16x16 tile
-    final int scale = 3;
-    
-    public final int tileSize = originalTileSize * scale; // 48 pixels
-    
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
-    final int screenWidth = tileSize * maxScreenCol; // 768 pixels
-    final int screenHeight = tileSize * maxScreenRow; // 576 pixels
+import static org.unibo.utils.Constats.PlayerConstats.*;
+import static org.unibo.utils.Constats.Directions.*;
 
-    // * Set the player's starting position
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 4;
+public class GamePanel extends JPanel {
+    private MouseHandler mouseHandler;
+    private float x, y = 10;
+    private BufferedImage image;
+    private BufferedImage[][] animations;
+    private int animTick = 0, animIndex = 0, animSpeed = 120 / 6;
+    private int playerState = RUNNING;
+    private int playerDirection = -1;
+    private boolean isMoving = false;
 
-    // * FPS tracking variables
-    int frameCount = 0;
-    long lastTime = System.nanoTime();
-    double fps = 0;
-
-    // * Handler 
-    KeyHandler keyH = new KeyHandler();
-    Thread gameThread;
-
-    // * instance Player
-    Player player = new Player(this, keyH);
+    private int playerSpeed = 2;
 
     public GamePanel() {
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.BLACK);
-        this.setDoubleBuffered(true);
-        this.setFocusable(true);
-        this.addKeyListener(keyH);
+        mouseHandler = new MouseHandler();
+        importImage();
+        loadAnimations();
+        addKeyListener(new KeyboardHandler(this));
+        setPanelSize();
+        addMouseListener(mouseHandler);
+        addMouseMotionListener(mouseHandler);
     }
 
-    public void startGameThread() {
-        gameThread = new Thread(this);
-        gameThread.start();
-    }
+    private void loadAnimations() {
+        animations = new BufferedImage[3][6];
 
-    @Override
-    public void run() {
-        double drawInterval = 1000000000 / 60; // 60 FPS
-        double nextDrawTime = System.nanoTime() + drawInterval;
-
-        while (gameThread != null) {
-            player.update();
-            repaint();
-
-            frameCount++;
-            long currentTime = System.nanoTime();
-            if (currentTime - lastTime >= 1000000000) {
-                fps = frameCount;
-                frameCount = 0;
-                lastTime = currentTime;
-                System.out.println("FPS: " + fps);
+        for (int r = 0; r < 3; r++) {
+            for (int c = 0; c < 6; c++) {
+                animations[r][c] = image.getSubimage(c * 24, r * 30, 24, 30);
             }
+        }
+    }
 
+    private void importImage() {
+        InputStream is = getClass().getResourceAsStream("/sprite.png");
+        try {
+            if (is == null) {
+                throw new IllegalArgumentException("Image file not found");
+            }
+            image = ImageIO.read(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            System.err.println("Image file not found: " + e.getMessage());
+        } finally {
             try {
-                double remainingTime = nextDrawTime - System.nanoTime();
-                remainingTime /= 1000000; // Convert to milliseconds
-
-                if (remainingTime < 0) remainingTime = 0;
-                Thread.sleep((long) (remainingTime));
-                nextDrawTime += drawInterval;
-            } catch (InterruptedException e) {
+                is.close();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    private void setPanelSize() {
+        Dimension size = new Dimension(600, 400);
+        setMinimumSize(size);
+        setPreferredSize(size);
+        setMaximumSize(size);
+    }
+
+    public void setDirection(int direction) {
+        this.playerDirection = direction;
+        setMoving(true);
+    }
+
+    public void setMoving(boolean moving) {
+        this.isMoving = moving;
+    }
+
+    private void updateAnimTick() {
+        animTick++;
+        if (animTick >= animSpeed) {
+            animTick = 0;
+            animIndex++;
+            if (animIndex >= GetSpriteAmount(playerState)) {
+                animIndex = 0;
+            }
+        }
+    }
+
+    private void setAnimation() {
+        if (isMoving) {
+            playerState = RUNNING;
+        } else {
+            playerState = IDLE;
+        }
+    }
+
+    private void updatePosition() {
+        if (isMoving) {
+            switch (playerDirection) {
+                case UP:
+                    y -= playerSpeed;
+                    break;
+                case DOWN:
+                    y += playerSpeed;
+                    break;
+                case LEFT:
+                    x -= playerSpeed;
+                    break;
+                case RIGHT:
+                    x += playerSpeed;
+                    break;
+            }
+        }
+    }
+
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        updateAnimTick();
 
-        Graphics2D g2d = (Graphics2D) g;
+        setAnimation();
+        updatePosition();
 
-        player.draw(g2d);
+        g.drawImage(animations[playerState][animIndex], (int) x, (int) y, 24 * 4, 30 * 4, null);
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        GamePanel gamePanel = new GamePanel();
-        frame.add(gamePanel);
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-        gamePanel.startGameThread();
-    }
 }
