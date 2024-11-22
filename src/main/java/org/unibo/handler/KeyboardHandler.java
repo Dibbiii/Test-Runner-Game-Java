@@ -4,50 +4,43 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import org.unibo.GamePanel;
+import org.unibo.GameState;
 
 public class KeyboardHandler implements KeyListener {
-    private GamePanel gamePanel;
+	private GamePanel gamePanel;
 
-    public KeyboardHandler(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
-    }
+	public KeyboardHandler(GamePanel gamePanel) {
+		this.gamePanel = gamePanel;
+	}
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_W:
-			gamePanel.getGame().getPlayer().setUp(false);
+		switch (GameState.state) {
+		case MENU:
+			gamePanel.getGame().getMenu().keyReleased(e);
 			break;
-		case KeyEvent.VK_A:
-			gamePanel.getGame().getPlayer().setLeft(false);
+		case PLAYING:
+			gamePanel.getGame().getPlaying().keyReleased(e);
 			break;
-		case KeyEvent.VK_S:
-			gamePanel.getGame().getPlayer().setDown(false);
-			break;
-		case KeyEvent.VK_D:
-			gamePanel.getGame().getPlayer().setRight(false);
+		default:
 			break;
 		}
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_W:
-			gamePanel.getGame().getPlayer().setUp(true);
+		switch (GameState.state) {
+		case MENU:
+			gamePanel.getGame().getMenu().keyPressed(e);
 			break;
-		case KeyEvent.VK_A:
-			gamePanel.getGame().getPlayer().setLeft(true);
+		case PLAYING:
+			gamePanel.getGame().getPlaying().keyPressed(e);
 			break;
-		case KeyEvent.VK_S:
-			gamePanel.getGame().getPlayer().setDown(true);
-			break;
-		case KeyEvent.VK_D:
-			gamePanel.getGame().getPlayer().setRight(true);
+		default:
 			break;
 		}
 	}

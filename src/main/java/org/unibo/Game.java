@@ -2,22 +2,22 @@ package org.unibo;
 
 import java.awt.Graphics;
 
-import org.unibo.entities.Player;
-import org.unibo.handler.LevelHandler;
+import org.unibo.gameStates.Menu;
+import org.unibo.gameStates.Playing;
 
 public class Game implements Runnable {
     private GameWindow gameWindow;
     private GamePanel gamePanel;
     private Thread gameThread;
 
-    private final int FPS = 120;
+    public final static int FPS = 120;
     private final int UPS = 200;
 
-    private Player player;
-    private LevelHandler levelHandler;
+    private Playing playing;
+    private Menu menu;
 
     public final static int TILES_DEFAULT_SIZE = 32;
-    public final static float SCALE = 1.0f;
+    public final static float SCALE = 1.2f;
     public final static int TILES_WIDTH = 26;
     public final static int TILES_HEIGHT = 14;
     public final static int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);
@@ -35,9 +35,8 @@ public class Game implements Runnable {
     }
 
     private void initClasses() {
-        levelHandler = new LevelHandler(this);
-        player = new Player(200, 200, (int) (24 * SCALE), (int) (30 * SCALE));
-        player.loadLevelData(levelHandler.getLevelData().getLevel());
+        menu = new Menu(this);
+        playing = new Playing(this);
     }
 
     private void startGameLoop() {
@@ -46,13 +45,32 @@ public class Game implements Runnable {
     }
 
     public void update() {
-        player.update();
-        levelHandler.update();
+        switch(GameState.state) {
+            case MENU:
+                menu.update();
+                break;
+            case PLAYING:
+                playing.update();
+                break;
+            case OPTIONS:
+            case QUIT:
+                System.exit(0);
+            default:
+                break;
+        }   
     }
 
     public void render(Graphics g) {
-        levelHandler.render(g);
-        player.render(g);
+        switch(GameState.state) {
+            case MENU:
+                menu.render(g);
+                break;
+            case PLAYING:
+                playing.render(g);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -99,15 +117,17 @@ public class Game implements Runnable {
         }
     }
 
-    public Player getPlayer() {
-        return player;
+    public void windowFocusLost() {
+        if (GameState.state == GameState.PLAYING) {
+            playing.getPlayer().resetPlayerBoolean();
+        }
     }
 
-    public void windowFocusLost() {
-        player.setLeft(false);
-        player.setRight(false);
-        player.setUp(false);
-        player.setDown(false);
-        player.setAttacking(false);
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public Playing getPlaying() {
+        return playing;
     }
 }

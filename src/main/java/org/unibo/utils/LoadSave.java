@@ -11,9 +11,11 @@ import javax.imageio.ImageIO;
 
 public class LoadSave {
 
-    public static final String PLAYER_ATLAS = "sprite.png";
+    public static final String PLAYER_ATLAS = "player_sprites.png";
     public static final String TILES_ATLAS = "tiles.png";
     public static final String LEVEL_ATLAS = "level.png";
+    public static final String MENU_BUTTON = "button_atlas.png";
+    public static final String MENU_BACKGROUND = "menu_background.png";
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
         BufferedImage image = null;
