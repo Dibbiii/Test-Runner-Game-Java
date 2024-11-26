@@ -2,13 +2,23 @@ package org.unibo.utils;
 
 import static org.unibo.Game.SCALE;
 
-public class Constats {
+public class Constants {
     public static class UI {
         public static class Buttons {
             public static final int BTN_DEFAULT_WIDTH = 140;    
             public static final int BTN_DEFAULT_HEIGHT = 56;
             public static final int BTN_WIDTH = (int) (BTN_DEFAULT_WIDTH * SCALE);
             public static final int BTN_HEIGHT = (int) (BTN_DEFAULT_HEIGHT * SCALE);
+        }
+
+        public static class PauseButtons {
+            public static final int SOUND_DEFAULT_SIZE = 42;
+            public static final int SOUND_SIZE = (int) (SOUND_DEFAULT_SIZE * SCALE);
+        }
+
+        public static class URMButtons{
+            public static final int URM_DEFAULT_SIZE = 56;
+            public static final int URM_SIZE = (int) (URM_DEFAULT_SIZE * SCALE);
         }
     }
 

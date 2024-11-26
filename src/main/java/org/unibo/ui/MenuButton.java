@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import org.unibo.GameState;
 import org.unibo.utils.LoadSave;
 
-import static org.unibo.utils.Constats.UI.Buttons.*;
+import static org.unibo.utils.Constants.UI.Buttons.*;
 import static org.unibo.utils.LoadSave.*;
 
 public class MenuButton {

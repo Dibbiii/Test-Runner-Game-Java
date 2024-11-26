@@ -3,10 +3,10 @@ package org.unibo.entities;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import org.unibo.Game;
 import org.unibo.utils.LoadSave;
 
-import static org.unibo.utils.Constats.PlayerConstats.*;
+import static org.unibo.utils.LoadSave.*;
+import static org.unibo.utils.Constants.PlayerConstats.*;
 import static org.unibo.utils.HelpMethods.*;
 import static org.unibo.Game.*;
 
@@ -31,11 +31,11 @@ public class Player extends Entity {
     public Player(float x, float y, int width, int height) {
         super(x, y, width, height);
         loadAnimations();
-        initHitBox(x, y, (int) (20 * Game.SCALE), (int) (27 * Game.SCALE));
+        initHitBox(x, y, (int) (20 * SCALE), (int) (27 * SCALE));
     }
     
     private void loadAnimations() {
-        BufferedImage image = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
+        BufferedImage image = LoadSave.GetSpriteAtlas(PLAYER_ATLAS);
 
         animations = new BufferedImage[9][6];
         for (int r = 0; r < 5; r++) {

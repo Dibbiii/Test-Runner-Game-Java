@@ -10,11 +10,16 @@ import org.unibo.Game;
 import org.unibo.GameState;
 import org.unibo.entities.Player;
 import org.unibo.handler.LevelHandler;
+import org.unibo.test.Health;
+import org.unibo.ui.PausedOverlay;
 
 public class Playing extends State implements StateMethods {
 
     private Player player;
     private LevelHandler levelHandler;
+    private Health healthBar;
+    private PausedOverlay pausedOverlay;
+    private boolean paused;
 
     public Playing(Game game) {
         super(game);
@@ -24,7 +29,13 @@ public class Playing extends State implements StateMethods {
     private void initClasses() {
         levelHandler = new LevelHandler(game);
         player = new Player(150, 150, (int) (64 * SCALE), (int) (40 * SCALE));
+        healthBar = new Health(5);
+        pausedOverlay = new PausedOverlay(this);
         player.loadLevelData(levelHandler.getLevelData().getLevel());
+    }
+
+    public void pauseGame() {
+        this.paused = !paused;
     }
 
     public Player getPlayer() {
@@ -40,31 +51,28 @@ public class Playing extends State implements StateMethods {
     }
 
     @Override
-    public void update() {
-        levelHandler.update();
-        player.update();
-    }
-
-    @Override
-    public void render(Graphics g) {
-        levelHandler.render(g);
-        player.render(g);
-    }
-
-    @Override
     public void mouseClicked(MouseEvent e) {
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if (paused) {
+            pausedOverlay.mousePressed(e);
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (paused) {
+            pausedOverlay.mouseReleased(e);
+        }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        if (paused) {
+            pausedOverlay.mouseMoved(e);
+        }
     }
 
     @Override
@@ -86,7 +94,13 @@ public class Playing extends State implements StateMethods {
                 player.setAttacking(true);
                 break;
             case KeyEvent.VK_ESCAPE:
-                GameState.state = GameState.MENU;
+                pauseGame();
+                break;
+            case KeyEvent.VK_E:
+                healthBar.setHealth(healthBar.getCurrentHealth() + 1);
+                break;
+            case KeyEvent.VK_Q:
+                healthBar.setHealth(healthBar.getCurrentHealth() - 1);
                 break;
         }
     }
@@ -99,7 +113,7 @@ public class Playing extends State implements StateMethods {
                 break;
             case KeyEvent.VK_A:
                 player.setLeft(false);
-                break; 
+                break;
             case KeyEvent.VK_S:
                 player.setDown(false);
                 break;
@@ -109,9 +123,30 @@ public class Playing extends State implements StateMethods {
             case KeyEvent.VK_SPACE:
                 player.setAttacking(false);
                 break;
-            case KeyEvent.VK_ESCAPE:
+            case KeyEvent.VK_R:
                 GameState.state = GameState.MENU;
                 break;
+        }
+    }
+
+    @Override
+    public void update() {
+        if (!paused) {
+            levelHandler.update();
+            player.update();
+            healthBar.update();
+        } else {
+            pausedOverlay.update();
+        }
+    }
+
+    @Override
+    public void render(Graphics g) {
+        levelHandler.render(g);
+        player.render(g);
+        healthBar.render(g);
+        if (paused) {
+            pausedOverlay.render(g);
         }
     }
 }
