@@ -11,14 +11,22 @@ import org.unibo.utils.LoadSave;
 import static org.unibo.Game.*;
 import static org.unibo.utils.Constants.UI.PauseButtons.*;
 import static org.unibo.utils.Constants.UI.URMButtons.*;
+import static org.unibo.utils.Constants.UI.VolumeButtons.*;
 
 public class PausedOverlay {
     private Playing playing;
     private BufferedImage overlayImage;
-    private int x, y, width, height;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
 
-    private SoundButton musicButton, sfxButton;
-    private UrmButton unpausedButton, replayButton, menuButton;
+    private SoundButton musicButton;
+    private SoundButton sfxButton;
+    private UrmButton unpausedButton;
+    private UrmButton replayButton;
+    private UrmButton menuButton;
+    private VolumeButton volumeButton;
 
     public PausedOverlay(Playing playing) {
         this.playing = playing;
@@ -26,6 +34,13 @@ public class PausedOverlay {
         loadOverlay();
         createSoundButtons();
         createUrmButtons();
+        createVolumeButton();
+    }
+
+    private void createVolumeButton() {
+        int volumeX = 309 * (int) SCALE;
+        int volumeY = 278 * (int) SCALE;
+        volumeButton = new VolumeButton(volumeX, volumeY, SLIDER_WIDTH, VOLUME_HEIGHT);
     }
 
     private void createUrmButtons() {
@@ -57,6 +72,7 @@ public class PausedOverlay {
     }
 
     public void mouseClicked(MouseEvent e) {
+        // TODO document why this method is empty
     }
 
     public void mousePressed(MouseEvent e) {
@@ -70,31 +86,27 @@ public class PausedOverlay {
             replayButton.setMousePressed(true);
         } else if (isIn(e, menuButton)) {
             menuButton.setMousePressed(true);
+        } else if (isIn(e, volumeButton)) {
+            volumeButton.setMousePressed(true);
         }
     }
 
     public void mouseReleased(MouseEvent e) {
-        if (isIn(e, musicButton)) {
-            if (musicButton.isMousePressed()) {
-                musicButton.setMuted(!musicButton.isMuted());
-            }
-        } else if (isIn(e, sfxButton)) {
-            if (sfxButton.isMousePressed()) {
-                sfxButton.setMuted(!sfxButton.isMuted());
-            }
-        } else if (isIn(e, unpausedButton)) {
-            if (unpausedButton.isMousePressed()) {
-                playing.pauseGame();
-            }
-        } else if (isIn(e, replayButton)) {
-            if (replayButton.isMousePressed()) {
-                System.out.println("Replay");
-            }
-        } else if (isIn(e, menuButton)) {
-            if (menuButton.isMousePressed()) { 
-                playing.pauseGame();
-                GameState.state = GameState.MENU;
-            }
+        if (isIn(e, musicButton) && musicButton.isMousePressed()) {
+            musicButton.setMuted(!musicButton.isMuted());
+
+        } else if (isIn(e, sfxButton) && sfxButton.isMousePressed()) {
+            sfxButton.setMuted(!sfxButton.isMuted());
+
+        } else if (isIn(e, unpausedButton) && unpausedButton.isMousePressed()) {
+            playing.pauseGame();
+
+        } else if (isIn(e, replayButton) && (replayButton.isMousePressed())) {
+            System.out.println("Replay");
+
+        } else if (isIn(e, menuButton) && menuButton.isMousePressed()) {
+            playing.pauseGame();
+            GameState.state = GameState.MENU;
         }
 
         musicButton.resetBooleans();
@@ -102,6 +114,7 @@ public class PausedOverlay {
         unpausedButton.resetBooleans();
         replayButton.resetBooleans();
         menuButton.resetBooleans();
+        volumeButton.resetBooleans();
     }
 
     public void mouseMoved(MouseEvent e) {
@@ -110,6 +123,7 @@ public class PausedOverlay {
         unpausedButton.setMouseOver(false);
         replayButton.setMouseOver(false);
         menuButton.setMouseOver(false);
+        volumeButton.setMouseOver(false);
 
         if (isIn(e, musicButton)) {
             musicButton.setMouseOver(true);
@@ -121,10 +135,15 @@ public class PausedOverlay {
             replayButton.setMouseOver(true);
         } else if (isIn(e, menuButton)) {
             menuButton.setMouseOver(true);
+        } else if (isIn(e, volumeButton)) {
+            volumeButton.setMouseOver(true);
         }
     }
 
     public void mouseDragged(MouseEvent e) {
+        if (volumeButton.isMousePressed()) {
+            volumeButton.changeX(e.getX());
+        }
     }
 
     private boolean isIn(MouseEvent e, PauseButton btn) {
@@ -137,6 +156,7 @@ public class PausedOverlay {
         unpausedButton.update();
         replayButton.update();
         menuButton.update();
+        volumeButton.update();
     }
 
     public void render(Graphics g) {
@@ -147,5 +167,6 @@ public class PausedOverlay {
         unpausedButton.render(g);
         replayButton.render(g);
         menuButton.render(g);
+        volumeButton.render(g);
     }
 }

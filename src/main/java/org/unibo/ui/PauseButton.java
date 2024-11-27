@@ -3,7 +3,10 @@ package org.unibo.ui;
 import java.awt.Rectangle;
 
 public class PauseButton {
-    protected int x, y, width, height;
+    protected int x;
+    protected int y;
+    protected int width;
+    protected int height;
     protected Rectangle bounds;
 
     public PauseButton(int x, int y, int width, int height) {

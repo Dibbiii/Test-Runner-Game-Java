@@ -11,7 +11,7 @@ public class Level {
         return levelData[y][x];
     }
 
-    public int[][] getLevel() {
+    public int[][] getLevelData() {
         return levelData;
     }
 

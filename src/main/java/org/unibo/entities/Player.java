@@ -33,7 +33,7 @@ public class Player extends Entity {
         loadAnimations();
         initHitBox(x, y, (int) (20 * SCALE), (int) (27 * SCALE));
     }
-    
+
     private void loadAnimations() {
         BufferedImage image = LoadSave.GetSpriteAtlas(PLAYER_ATLAS);
 
@@ -95,7 +95,7 @@ public class Player extends Entity {
             jump();
         }
 
-        if (!left && !right && !isInAir) {
+        if (!isInAir && (!left && !right || left && right)) {
             return;
         }
 
@@ -108,10 +108,8 @@ public class Player extends Entity {
             xStep += playerStep;
         }
 
-        if (!isInAir) {
-            if (!isOnGround(hitBox, levelData)) {
-                isInAir = true;
-            }
+        if (!isInAir && !isOnGround(hitBox, levelData)) {
+            isInAir = true;
         }
 
         if (isInAir) {
@@ -197,7 +195,7 @@ public class Player extends Entity {
 
     public void loadLevelData(int[][] levelData) {
         this.levelData = levelData;
-        if(!isOnGround(hitBox, levelData)) {
+        if (!isOnGround(hitBox, levelData)) {
             isInAir = true;
         }
     }
@@ -209,12 +207,10 @@ public class Player extends Entity {
         setAnimation();
     }
 
-    public void render(Graphics g) {
-        // Render player
-        g.drawImage(animations[playerState][animIndex], (int) (hitBox.x - xDrawOffSet), (int) (hitBox.y - yDrawOffSet),
+    public void render(Graphics g, int levelOffSet) {
+        g.drawImage(animations[playerState][animIndex], (int) (hitBox.x - xDrawOffSet) - levelOffSet,
+                (int) (hitBox.y - yDrawOffSet),
                 width, height, null);
-        // For Debugging
-        // drawHitBox(g);
     }
 
     public void resetPlayerBoolean() {

@@ -20,13 +20,14 @@ public class HelpMethods {
     }
 
     private static boolean isSolid(float x, float y, int[][] levelData) {
-        if (x < 0 || x >= GAME_WIDTH) {
+        int maxWidth = levelData[0].length * TILES_SIZE; 
+
+        if (x < 0 || x >= maxWidth) {
             return true;
         }
         if (y < 0 || y >= GAME_HEIGHT) {
             return true;
         }
-
         float xIndex = x / TILES_SIZE;
         float yIndex = y / TILES_SIZE;
 

@@ -1,7 +1,8 @@
 package org.unibo.gameStates;
 
-import static org.unibo.Game.SCALE;
+import static org.unibo.Game.*;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -12,14 +13,22 @@ import org.unibo.entities.Player;
 import org.unibo.handler.LevelHandler;
 import org.unibo.test.Health;
 import org.unibo.ui.PausedOverlay;
+import org.unibo.utils.LoadSave;
 
 public class Playing extends State implements StateMethods {
-
     private Player player;
     private LevelHandler levelHandler;
     private Health healthBar;
     private PausedOverlay pausedOverlay;
-    private boolean paused;
+
+    private boolean paused = false;
+
+    private int xLevelOffSet;
+    private int leftBorder = (int) (0.2 * GAME_WIDTH);
+    private int rightBorder = (int) (0.8 * GAME_WIDTH);
+    private int levelTileWide = LoadSave.GetLevelData()[0].length;
+    private int maxTilesOffset = levelTileWide - TILES_WIDTH;
+    private int maxLevelOffset = maxTilesOffset * TILES_SIZE;
 
     public Playing(Game game) {
         super(game);
@@ -28,10 +37,10 @@ public class Playing extends State implements StateMethods {
 
     private void initClasses() {
         levelHandler = new LevelHandler(game);
-        player = new Player(150, 150, (int) (64 * SCALE), (int) (40 * SCALE));
+        player = new Player(200, 200, (int) (64 * SCALE), (int) (40 * SCALE));
         healthBar = new Health(5);
         pausedOverlay = new PausedOverlay(this);
-        player.loadLevelData(levelHandler.getLevelData().getLevel());
+        player.loadLevelData(levelHandler.getLevelData().getLevelData());
     }
 
     public void pauseGame() {
@@ -52,6 +61,7 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        // TODO document why this method is empty
     }
 
     @Override
@@ -102,6 +112,8 @@ public class Playing extends State implements StateMethods {
             case KeyEvent.VK_Q:
                 healthBar.setHealth(healthBar.getCurrentHealth() - 1);
                 break;
+            default:
+                break;
         }
     }
 
@@ -126,6 +138,31 @@ public class Playing extends State implements StateMethods {
             case KeyEvent.VK_R:
                 GameState.state = GameState.MENU;
                 break;
+            default:
+                break;
+        }
+    }
+
+    public void mouseDragged(MouseEvent e) {
+        if (paused) {
+            pausedOverlay.mouseDragged(e);
+        }
+    }
+
+    private void checkCloseToBorder() {
+        int playerX = (int) player.getHitBox().x;
+        int diff = playerX - xLevelOffSet;
+
+        if (diff > rightBorder) {
+            xLevelOffSet += diff - rightBorder;
+        } else if (diff < leftBorder) {
+            xLevelOffSet += diff - leftBorder;
+        }
+
+        if (xLevelOffSet > maxLevelOffset) {
+            xLevelOffSet = maxLevelOffset;
+        } else if (xLevelOffSet < 0) {
+            xLevelOffSet = 0;
         }
     }
 
@@ -134,6 +171,7 @@ public class Playing extends State implements StateMethods {
         if (!paused) {
             levelHandler.update();
             player.update();
+            checkCloseToBorder();
             healthBar.update();
         } else {
             pausedOverlay.update();
@@ -142,10 +180,13 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void render(Graphics g) {
-        levelHandler.render(g);
-        player.render(g);
-        healthBar.render(g);
+        levelHandler.render(g, xLevelOffSet);
+        player.render(g, xLevelOffSet);
+        levelHandler.renderEndLevelMarker(g, xLevelOffSet);
+
         if (paused) {
+            g.setColor(new Color(0, 0, 0, 150));
+            g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             pausedOverlay.render(g);
         }
     }

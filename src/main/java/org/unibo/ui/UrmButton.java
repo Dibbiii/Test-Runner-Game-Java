@@ -23,7 +23,8 @@ public class UrmButton extends PauseButton {
         BufferedImage image = LoadSave.GetSpriteAtlas(URM_BUTTON);
         images = new BufferedImage[3];
         for (int c = 0; c < images.length; c++) {
-            images[c] = image.getSubimage(c * URM_DEFAULT_SIZE, rowIndex * URM_DEFAULT_SIZE, URM_DEFAULT_SIZE, URM_DEFAULT_SIZE);
+            images[c] = image.getSubimage(c * URM_DEFAULT_SIZE, rowIndex * URM_DEFAULT_SIZE, URM_DEFAULT_SIZE,
+                    URM_DEFAULT_SIZE);
         }
     }
 
@@ -50,10 +51,10 @@ public class UrmButton extends PauseButton {
 
     public void update() {
         index = 0;
-        if(mouseOver) {
+        if (mouseOver) {
             index = 1;
         }
-        if(mousePressed) {
+        if (mousePressed) {
             index = 2;
         }
     }

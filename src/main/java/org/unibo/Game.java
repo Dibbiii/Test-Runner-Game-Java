@@ -6,29 +6,28 @@ import org.unibo.gameStates.Menu;
 import org.unibo.gameStates.Playing;
 
 public class Game implements Runnable {
-    private GameWindow gameWindow;
     private GamePanel gamePanel;
     private Thread gameThread;
 
-    public final static int FPS = 120;
-    private final int UPS = 200;
+    public static final int FPS = 120;
+    private static final int UPS = 200;
 
     private Playing playing;
     private Menu menu;
 
-    public final static int TILES_DEFAULT_SIZE = 32;
-    public final static float SCALE = 1.0f;
-    public final static int TILES_WIDTH = 26;
-    public final static int TILES_HEIGHT = 14;
-    public final static int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);
-    public final static int GAME_WIDTH = TILES_WIDTH * TILES_SIZE;
-    public final static int GAME_HEIGHT = TILES_HEIGHT * TILES_SIZE;
+    public static final int TILES_DEFAULT_SIZE = 32;
+    public static final float SCALE = 1.0f;
+    public static final int TILES_WIDTH = 26;
+    public static final int TILES_HEIGHT = 14;
+    public static final int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);
+    public static final int GAME_WIDTH = TILES_WIDTH * TILES_SIZE;
+    public static final int GAME_HEIGHT = TILES_HEIGHT * TILES_SIZE;
 
     public Game() {
         initClasses();
 
         gamePanel = new GamePanel(this);
-        gameWindow = new GameWindow(gamePanel);
+        new GameWindow(gamePanel);
         gamePanel.requestFocus();
 
         startGameLoop();
@@ -55,6 +54,7 @@ public class Game implements Runnable {
             case OPTIONS:
             case QUIT:
                 System.exit(0);
+                break;
             default:
                 break;
         }   

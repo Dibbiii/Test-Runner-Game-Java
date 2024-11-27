@@ -17,29 +17,34 @@ import org.unibo.utils.LoadSave;
 public class Menu extends State implements StateMethods {
     private MenuButton[] buttons = new MenuButton[3];
     private BufferedImage backgroundImage;
-    private int menuX, menuY, menuWidth, menuHeight;
+    private BufferedImage imageBackgroundPink;
+    private int menuX;
+    private int menuY;
+    private int menuWidth;
+    private int menuHeight;
 
     public Menu(Game game) {
         super(game);
         loadButtons();
         laodBackground();
+        imageBackgroundPink = LoadSave.GetSpriteAtlas(BACKGROUND_MENU);
     }
 
     private void laodBackground() {
-        backgroundImage =  LoadSave.GetSpriteAtlas(MENU_BACKGROUND);
+        backgroundImage = LoadSave.GetSpriteAtlas(MENU_BACKGROUND);
         menuWidth = (int) (backgroundImage.getWidth() * SCALE);
         menuHeight = (int) (backgroundImage.getHeight() * SCALE);
         menuX = (GAME_WIDTH / 2) - (menuWidth / 2);
         menuY = (GAME_HEIGHT / 2) - (menuHeight / 2);
     }
 
-
-    // TODO: Implement a way to automatically laod buttons at the center of the screen
+    // TODO: Implement a way to automatically laod buttons at the center of the
+    // screen
     private void loadButtons() {
-    	buttons[0] = new MenuButton(GAME_WIDTH / 2, (int) (160 * SCALE), 0, PLAYING);
-		buttons[1] = new MenuButton(GAME_WIDTH / 2, (int) (230 * SCALE), 1, OPTIONS);
-		buttons[2] = new MenuButton(GAME_WIDTH / 2, (int) (300 * SCALE), 2, QUIT);
-	}
+        buttons[0] = new MenuButton(GAME_WIDTH / 2, (int) (160 * SCALE), 0, PLAYING);
+        buttons[1] = new MenuButton(GAME_WIDTH / 2, (int) (230 * SCALE), 1, OPTIONS);
+        buttons[2] = new MenuButton(GAME_WIDTH / 2, (int) (300 * SCALE), 2, QUIT);
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -110,6 +115,7 @@ public class Menu extends State implements StateMethods {
 
     @Override
     public void render(Graphics g) {
+        g.drawImage(imageBackgroundPink, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
         g.drawImage(backgroundImage, menuX, menuY, menuWidth, menuHeight, null);
         for (MenuButton mb : buttons) {
             mb.render(g);
