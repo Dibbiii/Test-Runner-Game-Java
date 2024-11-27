@@ -6,18 +6,25 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import org.unibo.Game;
 import org.unibo.GameState;
 import org.unibo.entities.Player;
+import org.unibo.handler.EnemyHandler;
 import org.unibo.handler.LevelHandler;
 import org.unibo.test.Health;
 import org.unibo.ui.PausedOverlay;
 import org.unibo.utils.LoadSave;
 
+import static org.unibo.utils.LoadSave.*;
+import static org.unibo.utils.Constants.Environment.*;
+
 public class Playing extends State implements StateMethods {
     private Player player;
     private LevelHandler levelHandler;
+    private EnemyHandler enemyHandler;
     private Health healthBar;
     private PausedOverlay pausedOverlay;
 
@@ -30,13 +37,26 @@ public class Playing extends State implements StateMethods {
     private int maxTilesOffset = levelTileWide - TILES_WIDTH;
     private int maxLevelOffset = maxTilesOffset * TILES_SIZE;
 
+    private BufferedImage backgroungPlayingImage, bigClouds, smallClouds;
+    private int[] smallCloudsPos;
+    private Random rnd = new Random();
+
     public Playing(Game game) {
         super(game);
         initClasses();
+
+        backgroungPlayingImage = LoadSave.GetSpriteAtlas(BACKGROUND_PLAYING);
+        bigClouds = LoadSave.GetSpriteAtlas(BIG_CLOUDS);
+        smallClouds = LoadSave.GetSpriteAtlas(SMALL_CLOUDS);
+        smallCloudsPos = new int[8];
+        for (int i = 0; i < smallCloudsPos.length; i++) {
+            smallCloudsPos[i] = 70 * (int) SCALE + rnd.nextInt(150 * (int) SCALE);
+        }
     }
 
     private void initClasses() {
         levelHandler = new LevelHandler(game);
+        enemyHandler = new EnemyHandler(this);
         player = new Player(200, 200, (int) (64 * SCALE), (int) (40 * SCALE));
         healthBar = new Health(5);
         pausedOverlay = new PausedOverlay(this);
@@ -166,11 +186,21 @@ public class Playing extends State implements StateMethods {
         }
     }
 
+    private void drawClouds(Graphics g) {
+        for (int i = 0; i < 3; i++) {
+            g.drawImage(bigClouds, (int) ((i * BIG_CLOUDS_WIDTH) - 0.3 * xLevelOffSet), (int) (204 * SCALE), BIG_CLOUDS_WIDTH, BIG_CLOUDS_HEIGHT, null);
+        }
+        for (int i = 0; i < smallCloudsPos.length; i++) {
+            g.drawImage(smallClouds, (int) ((SMALL_CLOUDS_WIDTH * 4 * i) - 0.7 * xLevelOffSet), smallCloudsPos[i], SMALL_CLOUDS_WIDTH, SMALL_CLOUDS_HEIGHT, null);
+        }
+    }
+    
     @Override
     public void update() {
         if (!paused) {
             levelHandler.update();
             player.update();
+            enemyHandler.update();
             checkCloseToBorder();
             healthBar.update();
         } else {
@@ -180,8 +210,13 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void render(Graphics g) {
+
+        g.drawImage(backgroungPlayingImage, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
+        drawClouds(g);
+
         levelHandler.render(g, xLevelOffSet);
         player.render(g, xLevelOffSet);
+        enemyHandler.render(g, xLevelOffSet);
         levelHandler.renderEndLevelMarker(g, xLevelOffSet);
 
         if (paused) {

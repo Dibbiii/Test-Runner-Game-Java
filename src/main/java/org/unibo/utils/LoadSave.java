@@ -1,13 +1,18 @@
 package org.unibo.utils;
 
 import static org.unibo.Game.*;
+import static org.unibo.utils.Constants.EnemyConstants.*;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+
+import org.unibo.entities.Enemy;
+import org.unibo.entities.Crabby;
 
 public class LoadSave {
 
@@ -21,6 +26,10 @@ public class LoadSave {
     public static final String VOLUME_BUTTON = "volume_buttons.png";
     public static final String URM_BUTTON = "urm_buttons.png"; // URM = unpause, replay, main menu
     public static final String BACKGROUND_MENU = "background_menu.png";
+    public static final String BACKGROUND_PLAYING = "playing_bg_img.png";
+    public static final String BIG_CLOUDS = "big_clouds.png";
+    public static final String SMALL_CLOUDS = "small_clouds.png";
+    public static final String ENEMY_ATLAS = "enemy_sprites.png";
 
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
@@ -40,6 +49,21 @@ public class LoadSave {
             }
         }
         return image;
+    }
+
+    public static ArrayList<Enemy> getEnemies() {
+        BufferedImage image = GetSpriteAtlas(LEVEL_ATLAS);
+        ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+        for (int r = 0; r < image.getHeight(); r++) {
+            for (int c = 0; c < image.getWidth(); c++) {
+                Color color = new Color(image.getRGB(c, r));
+                int value = color.getGreen();
+                if (value == ENEMY) {
+                    enemies.add(new Crabby(c * TILES_SIZE, r * TILES_SIZE));
+                }
+            }
+        }
+        return enemies;
     }
 
     public static int[][] GetLevelData() {
