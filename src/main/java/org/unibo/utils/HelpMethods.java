@@ -4,6 +4,8 @@ import static org.unibo.Game.*;
 
 import java.awt.geom.Rectangle2D;
 
+import org.unibo.Game;
+
 public class HelpMethods {
         public static boolean CanMoveHere(float x, float y, float width, float height, int[][] levelData) {
             int maxWidth = levelData[0].length * TILES_SIZE;
@@ -110,4 +112,32 @@ public class HelpMethods {
         }
         return true;
     }
+
+    public static boolean isFloor(Rectangle2D.Float hitBox, float xStep, int[][] levelData) {
+        return isSolid(hitBox.x + xStep, hitBox.y + hitBox.height + 1, levelData);
+    }
+
+    public static boolean IsAllTilesWalkable(int xStart, int xEnd, int y, int[][] levelData) {
+		for (int i = 0; i < xEnd - xStart; i++) {
+			if (IsTileSolid(xStart + i, y, levelData)) {
+				return false;
+            }
+			if (!IsTileSolid(xStart + i, y + 1, levelData)) {
+				return false;
+            }
+		}
+		return true;
+	}
+
+    public static boolean IsSightClear(int[][] levelData, Rectangle2D.Float firstHitbox, Rectangle2D.Float secondHitbox, int yTile) {
+		int firstXTile = (int) (firstHitbox.x / TILES_SIZE);
+		int secondXTile = (int) (secondHitbox.x / TILES_SIZE);
+
+		if (firstXTile > secondXTile) { 
+			return IsAllTilesWalkable(secondXTile, firstXTile, yTile, levelData);
+        }
+		else {
+			return IsAllTilesWalkable(firstXTile, secondXTile, yTile, levelData);
+        }
+	}
 }

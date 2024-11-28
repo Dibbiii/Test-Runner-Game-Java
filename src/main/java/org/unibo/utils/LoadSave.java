@@ -15,7 +15,6 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-import org.unibo.entities.Enemy;
 import org.unibo.entities.Crabby;
 
 public class LoadSave {

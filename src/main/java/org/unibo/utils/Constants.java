@@ -18,6 +18,7 @@ public class Constants {
 
     public static class EnemyConstants {
         public static final int CRABBY = 0;
+        public static final int CRABBY = 0;
 
         public static final int IDLE = 0;
         public static final int RUNNING = 1;
@@ -36,6 +37,7 @@ public class Constants {
 
         public static final int GetSpriteAmount(int enemyType, int enemyState) {
             switch (enemyType) {
+                case CRABBY:
                 case CRABBY:
                     switch (enemyState) {
                         case IDLE:
