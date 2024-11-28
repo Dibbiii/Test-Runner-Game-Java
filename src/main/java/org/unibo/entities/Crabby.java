@@ -1,8 +1,9 @@
 package org.unibo.entities;
 import static org.unibo.utils.Constants.EnemyConstants.*;
+
+import org.unibo.test.Health;
+
 import static org.unibo.Game.*;
-import static org.unibo.utils.HelpMethods.*;
-import static org.unibo.utils.Constants.Directions.*;
 
 public class Crabby extends Enemy {
 
@@ -28,6 +29,7 @@ public class Crabby extends Enemy {
                     }
                     if(isPlayerCloseForAttack(player)) {
                         newState(ATTACKING);
+                        Health.setHealth(Health.getCurrentHealth() - 1);
                     }
 
                     move(levelData);

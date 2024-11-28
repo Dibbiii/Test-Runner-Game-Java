@@ -4,21 +4,21 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Health {
-    private int maxHealth;
-    private int currentHealth;
-
-    public Health(int maxHealth) {
-        this.maxHealth = maxHealth;
-        this.currentHealth = maxHealth;
-    }
-
-    public int getCurrentHealth() {
-        return currentHealth;
-    }
-
-    public void setHealth(int health) {
-        if (health >= 0 && health <= maxHealth) {
-            currentHealth = health;
+    private static int maxHealth;
+        private static int currentHealth;
+        
+            public Health(int maxHealth) {
+                this.maxHealth = maxHealth;
+                this.currentHealth = maxHealth;
+            }
+        
+            public static int getCurrentHealth() {
+                return currentHealth;
+            }
+        
+            public static void setHealth(int health) {
+                if (health >= 0 && health <= maxHealth) {
+                currentHealth = health;
             System.out.println("Health: " + currentHealth);
         }
         if (currentHealth == 0) {

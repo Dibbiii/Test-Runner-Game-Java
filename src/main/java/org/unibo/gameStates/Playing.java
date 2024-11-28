@@ -7,9 +7,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.util.Random;
-import java.util.logging.Level;
 
 import org.unibo.Game;
 import org.unibo.GameState;
@@ -27,7 +25,7 @@ public class Playing extends State implements StateMethods {
     private Player player;
     private LevelHandler levelHandler;
     private EnemyHandler enemyHandler;
-    private Health healthBar;
+    public Health healthBar = new Health(5);
     private PausedOverlay pausedOverlay;
 
     private boolean paused = false;
@@ -60,7 +58,6 @@ public class Playing extends State implements StateMethods {
         levelHandler = new LevelHandler(game);
         enemyHandler = new EnemyHandler(this);
         player = new Player(200, 200, (int) (64 * SCALE), (int) (40 * SCALE));
-        healthBar = new Health(5);
         pausedOverlay = new PausedOverlay(this);
         player.loadLevelData(levelHandler.getCurrentLevel().getLevelData());
     }
@@ -129,10 +126,10 @@ public class Playing extends State implements StateMethods {
                 pauseGame();
                 break;
             case KeyEvent.VK_E:
-                healthBar.setHealth(healthBar.getCurrentHealth() + 1);
+                Health.setHealth(Health.getCurrentHealth() + 1);
                 break;
             case KeyEvent.VK_Q:
-                healthBar.setHealth(healthBar.getCurrentHealth() - 1);
+                Health.setHealth(Health.getCurrentHealth() - 1);
                 break;
             default:
                 break;
