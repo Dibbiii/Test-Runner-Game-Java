@@ -200,7 +200,7 @@ public class Playing extends State implements StateMethods {
         if (!paused) {
             levelHandler.update();
             player.update();
-            enemyHandler.update();
+            enemyHandler.update(levelHandler.getLevelData().getLevelData(), player);
             checkCloseToBorder();
             healthBar.update();
         } else {

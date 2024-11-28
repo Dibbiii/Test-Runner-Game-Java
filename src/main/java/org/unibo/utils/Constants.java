@@ -17,7 +17,7 @@ public class Constants {
     }
 
     public static class EnemyConstants {
-        public static final int ENEMY = 0;
+        public static final int CRABBY = 0;
 
         public static final int IDLE = 0;
         public static final int RUNNING = 1;
@@ -25,15 +25,18 @@ public class Constants {
         public static final int HIT = 3;
         public static final int DEAD = 4;
 
-        public static final int ENEMY_DEFAULT_WIDTH = 72;
-        public static final int ENEMY_DEFAULT_HEIGHT = 32;
+        public static final int CRABBY_DEFAULT_WIDTH = 72;
+        public static final int CRABBY_DEFAULT_HEIGHT = 32;
 
-        public static final int ENEMY_WIDTH = (int) (ENEMY_DEFAULT_WIDTH * SCALE);
-        public static final int ENEMY_HEIGHT = (int) (ENEMY_DEFAULT_HEIGHT * SCALE);
+        public static final int CRABBY_WIDTH = (int) (CRABBY_DEFAULT_WIDTH * SCALE);
+        public static final int CRABBY_HEIGHT = (int) (CRABBY_DEFAULT_HEIGHT * SCALE);
+
+        public static final int CRABBY_DRAWOFFSET_X = 26 * (int) SCALE;
+        public static final int CRABBY_DRAWOFFSET_Y = 9 * (int) SCALE;
 
         public static final int GetSpriteAmount(int enemyType, int enemyState) {
             switch (enemyType) {
-                case ENEMY:
+                case CRABBY:
                     switch (enemyState) {
                         case IDLE:
                             return 9;

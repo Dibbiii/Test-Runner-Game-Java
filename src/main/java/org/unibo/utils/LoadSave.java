@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import org.unibo.entities.Enemy;
 import org.unibo.entities.Crabby;
 
 public class LoadSave {
@@ -51,14 +50,14 @@ public class LoadSave {
         return image;
     }
 
-    public static ArrayList<Enemy> getEnemies() {
+    public static ArrayList<Crabby> getEnemies() {
         BufferedImage image = GetSpriteAtlas(LEVEL_ATLAS);
-        ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+        ArrayList<Crabby> enemies = new ArrayList<Crabby>();
         for (int r = 0; r < image.getHeight(); r++) {
             for (int c = 0; c < image.getWidth(); c++) {
                 Color color = new Color(image.getRGB(c, r));
                 int value = color.getGreen();
-                if (value == ENEMY) {
+                if (value == CRABBY) {
                     enemies.add(new Crabby(c * TILES_SIZE, r * TILES_SIZE));
                 }
             }

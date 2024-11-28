@@ -27,8 +27,8 @@ public abstract class Entity {
     }
 
     // draw the hitbox for debugging
-    protected void drawHitBox(Graphics g) { 
+    protected void drawHitBox(Graphics g, int xLevelOffSet) { 
         g.setColor(Color.RED);
-        g.drawRect((int) hitBox.x, (int) hitBox.y, (int) hitBox.width, (int) hitBox.height);
+        g.drawRect((int) hitBox.x - xLevelOffSet, (int) hitBox.y, (int) hitBox.width, (int) hitBox.height);
     }
 }
