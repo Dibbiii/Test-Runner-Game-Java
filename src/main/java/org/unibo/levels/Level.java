@@ -3,6 +3,8 @@ package org.unibo.levels;
 public class Level {
     private int[][] levelData;
 
+    
+
     public Level(int[][] levelData) {
         this.levelData = levelData;
     }

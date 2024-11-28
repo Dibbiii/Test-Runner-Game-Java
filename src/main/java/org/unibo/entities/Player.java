@@ -194,7 +194,9 @@ public class Player extends Entity {
     }
 
     public void loadLevelData(int[][] levelData) {
+        System.out.println("Loading level data");
         this.levelData = levelData;
+        System.out.println("Level Data " + levelData.length);
         if (!isOnGround(hitBox, levelData)) {
             isInAir = true;
         }

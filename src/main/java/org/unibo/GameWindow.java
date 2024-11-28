@@ -12,9 +12,9 @@ public class GameWindow {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 400);
         frame.add(gamePanel);
-        frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.pack(); // This will resize the frame to fit the panel
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.addWindowFocusListener(new WindowFocusListener() {
             @Override

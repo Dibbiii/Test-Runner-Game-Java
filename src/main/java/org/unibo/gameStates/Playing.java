@@ -7,7 +7,9 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.logging.Level;
 
 import org.unibo.Game;
 import org.unibo.GameState;
@@ -33,7 +35,7 @@ public class Playing extends State implements StateMethods {
     private int xLevelOffSet;
     private int leftBorder = (int) (0.2 * GAME_WIDTH);
     private int rightBorder = (int) (0.8 * GAME_WIDTH);
-    private int levelTileWide = LoadSave.GetLevelData()[0].length;
+    private int levelTileWide = LoadSave.getFullLevelWitdh();
     private int maxTilesOffset = levelTileWide - TILES_WIDTH;
     private int maxLevelOffset = maxTilesOffset * TILES_SIZE;
 
@@ -60,7 +62,7 @@ public class Playing extends State implements StateMethods {
         player = new Player(200, 200, (int) (64 * SCALE), (int) (40 * SCALE));
         healthBar = new Health(5);
         pausedOverlay = new PausedOverlay(this);
-        player.loadLevelData(levelHandler.getLevelData().getLevelData());
+        player.loadLevelData(levelHandler.getCurrentLevel().getLevelData());
     }
 
     public void pauseGame() {
@@ -172,15 +174,16 @@ public class Playing extends State implements StateMethods {
     private void checkCloseToBorder() {
         int playerX = (int) player.getHitBox().x;
         int diff = playerX - xLevelOffSet;
-
+    
         if (diff > rightBorder) {
             xLevelOffSet += diff - rightBorder;
         } else if (diff < leftBorder) {
             xLevelOffSet += diff - leftBorder;
         }
-
-        if (xLevelOffSet > maxLevelOffset) {
-            xLevelOffSet = maxLevelOffset;
+    
+        int extendedLevelWidth = levelTileWide * TILES_SIZE;
+        if (xLevelOffSet > extendedLevelWidth - GAME_WIDTH) {
+            xLevelOffSet = extendedLevelWidth - GAME_WIDTH;
         } else if (xLevelOffSet < 0) {
             xLevelOffSet = 0;
         }
@@ -200,7 +203,7 @@ public class Playing extends State implements StateMethods {
         if (!paused) {
             levelHandler.update();
             player.update();
-            enemyHandler.update();
+            enemyHandler.update(levelHandler.getCurrentLevel().getLevelData(), player);
             checkCloseToBorder();
             healthBar.update();
         } else {
@@ -216,6 +219,7 @@ public class Playing extends State implements StateMethods {
 
         levelHandler.render(g, xLevelOffSet);
         player.render(g, xLevelOffSet);
+        healthBar.render(g);
         enemyHandler.render(g, xLevelOffSet);
         levelHandler.renderEndLevelMarker(g, xLevelOffSet);
 

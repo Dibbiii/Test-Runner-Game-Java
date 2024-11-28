@@ -5,6 +5,8 @@ import static org.unibo.Game.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.unibo.Game;
 import org.unibo.levels.Level;
@@ -20,7 +22,7 @@ public class LevelHandler {
     public LevelHandler(Game game) {
         this.game = game;
         importTiles();
-        level = new Level(LoadSave.GetLevelData());
+        level = new Level(loadFullLevelData());
     }
 
     private void importTiles() {
@@ -34,7 +36,28 @@ public class LevelHandler {
         }
     }
 
-    public Level getLevelData() {
+    private int[][] loadFullLevelData() {
+        List<int[][]> levels = new ArrayList<>();
+        for (String levelFile : WAGOONS) {
+            levels.add(LoadSave.GetLevelData(levelFile));
+        }
+
+        int totalWidth = levels.stream().mapToInt(level -> level[0].length).sum();
+        int height = levels.get(0).length;
+        int[][] fullLevelData = new int[height][totalWidth];
+
+        int currentX = 0;
+        for (int[][] level : levels) {
+            for (int y = 0; y < height; y++) {
+                System.arraycopy(level[y], 0, fullLevelData[y], currentX, level[y].length);
+            }
+            currentX += level[0].length;
+        }
+
+        return fullLevelData;
+    }
+
+    public Level getCurrentLevel() {
         return level;
     }
 
