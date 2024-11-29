@@ -5,7 +5,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import org.unibo.GamePanel;
-import org.unibo.GameState;
+import org.unibo.gameStates.GameState;
 
 public class MouseHandler implements MouseListener, MouseMotionListener {
 

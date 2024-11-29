@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import org.unibo.GameState;
 import org.unibo.gameStates.*;
 import org.unibo.utils.LoadSave;
 

@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import org.unibo.GamePanel;
-import org.unibo.GameState;
+import org.unibo.gameStates.GameState;
 
 public class KeyboardHandler implements KeyListener {
 	private GamePanel gamePanel;

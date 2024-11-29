@@ -1,7 +1,10 @@
 package org.unibo;
 
+import static org.unibo.utils.LoadSave.loadSavesFile;
+
 import java.awt.Graphics;
 
+import org.unibo.gameStates.GameState;
 import org.unibo.gameStates.Menu;
 import org.unibo.gameStates.Playing;
 
@@ -35,7 +38,12 @@ public class Game implements Runnable {
 
     private void initClasses() {
         menu = new Menu(this);
-        playing = new Playing(this);
+        initGame();
+    }
+    
+    private void initGame() {
+        playing = new Playing(this); // TODO: Move it at the end of the func
+        loadSavesFile();
     }
 
     private void startGameLoop() {

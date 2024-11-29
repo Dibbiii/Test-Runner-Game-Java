@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import org.unibo.GameState;
+import org.unibo.gameStates.GameState;
 import org.unibo.utils.LoadSave;
 
 import static org.unibo.utils.Constants.UI.Buttons.*;

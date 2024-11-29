@@ -1,7 +1,7 @@
 package org.unibo.gameStates;
 
 import static org.unibo.Game.*;
-import static org.unibo.GameState.*;
+import static org.unibo.gameStates.GameState.*;
 import static org.unibo.utils.LoadSave.*;
 
 import java.awt.Graphics;
@@ -10,12 +10,11 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import org.unibo.Game;
-import org.unibo.GameState;
 import org.unibo.ui.MenuButton;
 import org.unibo.utils.LoadSave;
 
 public class Menu extends State implements StateMethods {
-    private MenuButton[] buttons = new MenuButton[3];
+    private MenuButton[] buttons = new MenuButton[4];
     private BufferedImage backgroundImage;
     private BufferedImage imageBackgroundPink;
     private int menuX;
@@ -41,9 +40,13 @@ public class Menu extends State implements StateMethods {
     // TODO: Implement a way to automatically laod buttons at the center of the
     // screen
     private void loadButtons() {
-        buttons[0] = new MenuButton(GAME_WIDTH / 2, (int) (160 * SCALE), 0, PLAYING);
-        buttons[1] = new MenuButton(GAME_WIDTH / 2, (int) (230 * SCALE), 1, OPTIONS);
-        buttons[2] = new MenuButton(GAME_WIDTH / 2, (int) (300 * SCALE), 2, QUIT);
+        // * Continue Game 
+        // ! Dont forget to add Save Button on Pause Menu
+        buttons[0] = new MenuButton(GAME_WIDTH / 2, (int) (130 * SCALE), 0, PLAYING);
+        // * Create New Game
+        buttons[1] = new MenuButton(GAME_WIDTH / 2, (int) (190 * SCALE), 1, PLAYING);
+        buttons[2] = new MenuButton(GAME_WIDTH / 2, (int) (250 * SCALE), 1, OPTIONS);
+        buttons[3] = new MenuButton(GAME_WIDTH / 2, (int) (290 * SCALE), 2, QUIT);
     }
 
     @Override
@@ -67,7 +70,6 @@ public class Menu extends State implements StateMethods {
                 if (mb.isMousePressed()) {
                     mb.setMousePressed(false);
                     mb.setGameState();
-                    System.out.println("State: " + GameState.state);
                 }
                 break;
             }

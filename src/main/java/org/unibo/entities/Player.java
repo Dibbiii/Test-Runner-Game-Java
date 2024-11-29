@@ -1,5 +1,6 @@
 package org.unibo.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -24,6 +25,25 @@ public class Player extends Entity {
     private float jumpSpeed = -2.4f * SCALE;
     private float fallSpeedAfterCollision = 0.5f * SCALE;
 
+    // * 
+    private BufferedImage statusBarImage;
+
+    // * Posiition and Size of the status bar Image
+	private int statusBarWidth = (int) (192 * SCALE);
+	private int statusBarHeight = (int) (58 * SCALE);
+	private int statusBarX = (int) (10 * SCALE);
+	private int statusBarY = (int) (10 * SCALE);
+
+    // * Position and Size of the health bar
+	private int healthBarWidth = (int) (150 * SCALE);
+	private int healthBarHeight = (int) (4 * SCALE);
+	private int healthBarXStart = (int) (34 * SCALE);
+	private int healthBarYStart = (int) (14 * SCALE);
+
+	private int maxHealth = 10;
+	private int currentHealth = maxHealth;
+	private int healthWidth = healthBarWidth;
+
     private int[][] levelData;
 
     private float xDrawOffSet = 21 * SCALE, yDrawOffSet = 4 * SCALE;
@@ -43,6 +63,8 @@ public class Player extends Entity {
                 animations[r][c] = image.getSubimage(c * 64, r * 40, 64, 40);
             }
         }
+
+        statusBarImage = LoadSave.GetSpriteAtlas(STATUS_BAR);
     }
 
     private void updateAnimTick() {
@@ -140,6 +162,15 @@ public class Player extends Entity {
         }
     }
 
+    public void changeHealth(int value) {
+		currentHealth += value;
+
+		if (currentHealth <= 0)
+			currentHealth = 0;
+		else if (currentHealth >= maxHealth)
+			currentHealth = maxHealth;
+	}
+
     public void jump() {
         if (isInAir) {
             return;
@@ -202,8 +233,19 @@ public class Player extends Entity {
         }
     }
 
+    private void updateHealthBar() {
+		healthWidth = (int) ((currentHealth / (float) maxHealth) * healthBarWidth);
+	}
+
+    private void drawUI(Graphics g) {
+		g.drawImage(statusBarImage, statusBarX, statusBarY, statusBarWidth, statusBarHeight, null);
+		g.setColor(Color.red);
+		g.fillRect(healthBarXStart + statusBarX, healthBarYStart + statusBarY, healthWidth, healthBarHeight);
+	}
+
     public void update() {
         // Update player
+        updateHealthBar();
         updatePosition();
         updateAnimTick();
         setAnimation();
@@ -213,6 +255,7 @@ public class Player extends Entity {
         g.drawImage(animations[playerState][animIndex], (int) (hitBox.x - xDrawOffSet) - levelOffSet,
                 (int) (hitBox.y - yDrawOffSet),
                 width, height, null);
+        drawUI(g);        
     }
 
     public void resetPlayerBoolean() {

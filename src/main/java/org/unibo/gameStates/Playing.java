@@ -10,11 +10,9 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import org.unibo.Game;
-import org.unibo.GameState;
 import org.unibo.entities.Player;
 import org.unibo.handler.EnemyHandler;
 import org.unibo.handler.LevelHandler;
-import org.unibo.test.Health;
 import org.unibo.ui.PausedOverlay;
 import org.unibo.utils.LoadSave;
 
@@ -25,7 +23,6 @@ public class Playing extends State implements StateMethods {
     private Player player;
     private LevelHandler levelHandler;
     private EnemyHandler enemyHandler;
-    public Health healthBar = new Health(5);
     private PausedOverlay pausedOverlay;
 
     private boolean paused = false;
@@ -125,12 +122,6 @@ public class Playing extends State implements StateMethods {
             case KeyEvent.VK_ESCAPE:
                 pauseGame();
                 break;
-            case KeyEvent.VK_E:
-                Health.setHealth(Health.getCurrentHealth() + 1);
-                break;
-            case KeyEvent.VK_Q:
-                Health.setHealth(Health.getCurrentHealth() - 1);
-                break;
             default:
                 break;
         }
@@ -202,7 +193,6 @@ public class Playing extends State implements StateMethods {
             player.update();
             enemyHandler.update(levelHandler.getCurrentLevel().getLevelData(), player);
             checkCloseToBorder();
-            healthBar.update();
         } else {
             pausedOverlay.update();
         }
@@ -216,7 +206,6 @@ public class Playing extends State implements StateMethods {
 
         levelHandler.render(g, xLevelOffSet);
         player.render(g, xLevelOffSet);
-        healthBar.render(g);
         enemyHandler.render(g, xLevelOffSet);
         levelHandler.renderEndLevelMarker(g, xLevelOffSet);
 
