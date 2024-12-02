@@ -82,6 +82,7 @@ public class LoadSave {
 
     public static void loadSavesFile() {
         System.out.println("Loading saves files...");
+        existsSavesFolder();
         if (isSavesFolderEmpty()) {
             System.out.println("Folder is empty");
             createFile();
@@ -111,18 +112,31 @@ public class LoadSave {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
         String formattedDateTime = now.format(formatter);
         String filePath = SAVES_FOLDER + "save_" + formattedDateTime + ".yaml";
-        String content = "message: HelloWorld\ncreated_at: " + formattedDateTime;
-
         System.out.println("Creating YAML file...");
 
         try {
-            // Ensure the directory exists
-            existsSavesFolder();
-
-            Files.write(Paths.get(filePath), Collections.singleton(content));
+            String message = "message: jjjj";
+            String createdAt = "created_at: " + formattedDateTime;
+            Files.write(Paths.get(filePath), Arrays.asList(message, createdAt));
             System.out.println("YAML file created successfully.");
         } catch (IOException e) {
             System.out.println("An error occurred while creating the Saves file.");
+            e.printStackTrace();
+        }
+        appendLineToFile(filePath, "new line");
+    }
+
+    public static void appendLineToFile(String filePath, String newLine) {
+        try {
+            // Read all lines from the file
+            List<String> lines = new ArrayList<>(Files.readAllLines(Paths.get(filePath)));
+            // Add the new line
+            lines.add(newLine);
+            // Write all lines back to the file
+            Files.write(Paths.get(filePath), lines);
+            System.out.println("Line appended successfully.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while appending the line to the file.");
             e.printStackTrace();
         }
     }
