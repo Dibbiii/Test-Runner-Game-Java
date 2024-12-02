@@ -30,7 +30,6 @@ public class Playing extends State implements StateMethods {
     private EnemyHandler enemyHandler;
     private PausedOverlay pausedOverlay;
     private GameOverOverlay gameOverOverlay;
-    private GameOverOverlay gameOverOverlay;
 
     private boolean paused = false;
 
@@ -110,19 +109,11 @@ public class Playing extends State implements StateMethods {
             if (paused) {
                 pausedOverlay.mousePressed(e);
             }
-        if (!gameOver) {
-            if (paused) {
-                pausedOverlay.mousePressed(e);
-            }
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (!gameOver) {
-            if (paused) {
-                pausedOverlay.mouseReleased(e);
-            }
         if (!gameOver) {
             if (paused) {
                 pausedOverlay.mouseReleased(e);
@@ -136,41 +127,12 @@ public class Playing extends State implements StateMethods {
             if (paused) {
                 pausedOverlay.mouseMoved(e);
             }
-        if (!gameOver) {
-            if (paused) {
-                pausedOverlay.mouseMoved(e);
-            }
         }
     }
 
+
     @Override
     public void keyPressed(KeyEvent e) {
-        if (gameOver) {
-            gameOverOverlay.keyPressed(e);
-            return;
-        } else {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_W:
-                    player.setJumping(true);
-                    break;
-                case KeyEvent.VK_A:
-                    player.setLeft(true);
-                    break;
-                case KeyEvent.VK_S:
-                    player.setDown(true);
-                    break;
-                case KeyEvent.VK_D:
-                    player.setRight(true);
-                    break;
-                case KeyEvent.VK_SPACE:
-                    player.setAttacking(true);
-                    break;
-                case KeyEvent.VK_ESCAPE:
-                    pauseGame();
-                    break;
-                default:
-                    break;
-            }
         if (gameOver) {
             gameOverOverlay.keyPressed(e);
             return;
@@ -225,29 +187,6 @@ public class Playing extends State implements StateMethods {
                 default:
                     break;
             }
-        if (!gameOver) {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_W:
-                    player.setJumping(false);
-                    break;
-                case KeyEvent.VK_A:
-                    player.setLeft(false);
-                    break;
-                case KeyEvent.VK_S:
-                    player.setDown(false);
-                    break;
-                case KeyEvent.VK_D:
-                    player.setRight(false);
-                    break;
-                case KeyEvent.VK_SPACE:
-                    player.setAttacking(false);
-                    break;
-                case KeyEvent.VK_R:
-                    GameState.state = GameState.MENU;
-                    break;
-                default:
-                    break;
-            }
         }
     }
 
@@ -263,13 +202,11 @@ public class Playing extends State implements StateMethods {
         int playerX = (int) player.getHitBox().x;
         int diff = playerX - xLevelOffSet;
 
-
         if (diff > rightBorder) {
             xLevelOffSet += diff - rightBorder;
         } else if (diff < leftBorder) {
             xLevelOffSet += diff - leftBorder;
         }
-
 
         int extendedLevelWidth = levelTileWide * TILES_SIZE;
         if (xLevelOffSet > extendedLevelWidth - GAME_WIDTH) {
@@ -309,25 +246,8 @@ public class Playing extends State implements StateMethods {
         this.gameOver = gameOver;
     }
 
-    public void resetAll() {
-        gameOver = false;
-        paused = false;
-        player.resetAll();
-        enemyHandler.resetAllEnemies();
-    }
-
-    public void checkEnemyHit(Rectangle2D.Float attackBox) {
-        enemyHandler.checkEnemyHit(attackBox);
-    }
-
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
-    }
-
-
     @Override
     public void update() {
-        if (!paused && !gameOver) {
         if (!paused && !gameOver) {
             levelHandler.update();
             player.update();
