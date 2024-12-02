@@ -7,29 +7,16 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
 import org.unibo.entities.Crabby;
 
 public class LoadSave {
-    private static final String SAVES_FOLDER = "src/main/assets/saves/";
-
     // * Menu Sprites
     public static final String MENU_BUTTON = "menu/button_atlas.png";
     public static final String MENU_BACKGROUND = "menu/menu_background.png";
@@ -80,89 +67,6 @@ public class LoadSave {
         System.out.println("Wagoons: " + Arrays.toString(WAGOONS));
     }
 
-    public static void loadSavesFile() {
-        System.out.println("Loading saves files...");
-        existsSavesFolder();
-        if (isSavesFolderEmpty()) {
-            System.out.println("Folder is empty");
-            createFile();
-        } else {
-            System.out.println("Folder is not empty");
-            getSavesFiles();
-        }
-    }
-
-    private static void getSavesFiles() {
-        try {
-            List<Path> files = Files.list(Paths.get(SAVES_FOLDER))
-                    .filter(Files::isRegularFile)
-                    .sorted(Comparator.comparingLong(p -> ((Path) p).toFile().lastModified()).reversed())
-                    .collect(Collectors.toList());
-            for (Path p : files) {
-                System.out.println(p.getFileName());
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred while getting the Saves files.");
-            e.printStackTrace();
-        }
-    }
-
-    public static void createFile() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
-        String formattedDateTime = now.format(formatter);
-        String filePath = SAVES_FOLDER + "save_" + formattedDateTime + ".yaml";
-        System.out.println("Creating YAML file...");
-
-        try {
-            String message = "message: jjjj";
-            String createdAt = "created_at: " + formattedDateTime;
-            Files.write(Paths.get(filePath), Arrays.asList(message, createdAt));
-            System.out.println("YAML file created successfully.");
-        } catch (IOException e) {
-            System.out.println("An error occurred while creating the Saves file.");
-            e.printStackTrace();
-        }
-        appendLineToFile(filePath, "new line");
-    }
-
-    public static void appendLineToFile(String filePath, String newLine) {
-        try {
-            // Read all lines from the file
-            List<String> lines = new ArrayList<>(Files.readAllLines(Paths.get(filePath)));
-            // Add the new line
-            lines.add(newLine);
-            // Write all lines back to the file
-            Files.write(Paths.get(filePath), lines);
-            System.out.println("Line appended successfully.");
-        } catch (IOException e) {
-            System.out.println("An error occurred while appending the line to the file.");
-            e.printStackTrace();
-        }
-    }
-
-    private static void existsSavesFolder() {
-        try {
-            Path path = Paths.get(SAVES_FOLDER);
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred while looking if the folder exists.");
-            e.printStackTrace();
-        }
-    }
-
-    public static boolean isSavesFolderEmpty() {
-        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(SAVES_FOLDER))) {
-            return !directoryStream.iterator().hasNext();
-        } catch (IOException e) {
-            System.out.println("An error occurred while checking if the folder is empty.");
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public static BufferedImage GetSpriteAtlas(String fileName) {
         BufferedImage image = null;
         InputStream is = LoadSave.class.getResourceAsStream("/" + fileName);
@@ -182,8 +86,8 @@ public class LoadSave {
         return image;
     }
 
-    public static ArrayList<Crabby> getEnemies() {
-        ArrayList<Crabby> enemies = new ArrayList<Crabby>();
+    public static ArrayList<Crabby> getCrabbies() {
+        ArrayList<Crabby> crabbies = new ArrayList<>();
         int xOffset = 0;
 
         for (String wagoon : WAGOONS) {
@@ -195,13 +99,13 @@ public class LoadSave {
                     Color color = new Color(image.getRGB(c, r));
                     int value = color.getGreen();
                     if (value == CRABBY) {
-                        enemies.add(new Crabby((c + xOffset) * TILES_SIZE, r * TILES_SIZE));
+                        crabbies.add(new Crabby((c + xOffset) * TILES_SIZE, r * TILES_SIZE));
                     }
                 }
             }
             xOffset += imageWidth;
         }
-        return enemies;
+        return crabbies;
     }
 
     public static int[][] GetLevelData(String fileName) {

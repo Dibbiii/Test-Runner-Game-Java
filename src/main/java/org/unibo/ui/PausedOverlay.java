@@ -102,7 +102,7 @@ public class PausedOverlay {
 
         } else if (isIn(e, replayButton) && (replayButton.isMousePressed())) {
             System.out.println("Replay");
-
+            playing.saveGame();
         } else if (isIn(e, menuButton) && menuButton.isMousePressed()) {
             playing.pauseGame();
             GameState.state = GameState.MENU;

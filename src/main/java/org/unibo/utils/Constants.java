@@ -28,7 +28,7 @@ public class Constants {
 
         public static final int CRABBY_DEFAULT_WIDTH = 72;
         public static final int CRABBY_DEFAULT_HEIGHT = 32;
-        
+
         public static final int CRABBY_WIDTH = (int) (CRABBY_DEFAULT_WIDTH * SCALE);
         public static final int CRABBY_HEIGHT = (int) (CRABBY_DEFAULT_HEIGHT * SCALE);
 
@@ -54,6 +54,24 @@ public class Constants {
                     }
             }
             return 0;
+        }
+
+        public static int GetMaxHealth(int enemyType) {
+            switch (enemyType) {
+                case CRABBY:
+                    return 10;
+                default:
+                    return 1;
+            }
+        }
+
+        public static int GetEnemyDamage(int enemyType) {
+            switch (enemyType) {
+                case CRABBY:
+                    return 15;
+                default:
+                    return 0;
+            }
         }
     }
 
@@ -98,14 +116,14 @@ public class Constants {
         public static final int RUNNING = 1;
         public static final int JUMPING = 2;
         public static final int FALLING = 3;
-        public static final int GROUND = 4;
+        public static final int ATTACKING = 4;
         public static final int HIT = 5;
-        public static final int ATTACKING = 6;
-        public static final int ATTACK_JUMP_1 = 7;
-        public static final int ATTACK_JUMP_2 = 8;
+        public static final int DEAD = 6;
 
         public static int GetSpriteAmount(int player_action) {
             switch (player_action) {
+                case DEAD:
+                    return 8;
                 case RUNNING:
                     return 5;
                 case IDLE:
@@ -114,11 +132,7 @@ public class Constants {
                     return 4;
                 case JUMPING:
                 case ATTACKING:
-                case ATTACK_JUMP_1:
-                case ATTACK_JUMP_2:
                     return 3;
-                case GROUND:
-                    return 2;
                 case FALLING:
                 default:
                     return 1;

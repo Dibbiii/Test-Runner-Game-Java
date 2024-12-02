@@ -1,22 +1,26 @@
 package org.unibo;
 
-import static org.unibo.utils.LoadSave.loadSavesFile;
-
 import java.awt.Graphics;
 
 import org.unibo.gameStates.GameState;
 import org.unibo.gameStates.Menu;
 import org.unibo.gameStates.Playing;
+import org.unibo.utils.Config;
+import org.unibo.utils.GameSaves;
 
 public class Game implements Runnable {
     private GamePanel gamePanel;
     private Thread gameThread;
+    public GameSaves gameSaves;
+    private Playing playing;
+    private Menu menu;
 
     public static final int FPS = 120;
     private static final int UPS = 200;
 
-    private Playing playing;
-    private Menu menu;
+    private Config config;
+
+    public boolean gameOver;
 
     public static final int TILES_DEFAULT_SIZE = 32;
     public static final float SCALE = 1.0f;
@@ -38,12 +42,13 @@ public class Game implements Runnable {
 
     private void initClasses() {
         menu = new Menu(this);
+        config = new Config();
         initGame();
     }
     
     private void initGame() {
-        playing = new Playing(this); // TODO: Move it at the end of the func
-        loadSavesFile();
+        gameSaves = new GameSaves();
+        playing = new Playing(this); 
     }
 
     private void startGameLoop() {
@@ -137,5 +142,9 @@ public class Game implements Runnable {
 
     public Playing getPlaying() {
         return playing;
+    }
+
+    public GameSaves getGameSaves() {
+        return new GameSaves();
     }
 }
