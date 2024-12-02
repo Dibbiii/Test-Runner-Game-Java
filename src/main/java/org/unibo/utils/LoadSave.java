@@ -182,8 +182,8 @@ public class LoadSave {
         return image;
     }
 
-    public static ArrayList<Crabby> getEnemies() {
-        ArrayList<Crabby> enemies = new ArrayList<Crabby>();
+    public static ArrayList<Crabby> getCrabbies() {
+        ArrayList<Crabby> crabbies = new ArrayList<>();
         int xOffset = 0;
 
         for (String wagoon : WAGOONS) {
@@ -195,13 +195,13 @@ public class LoadSave {
                     Color color = new Color(image.getRGB(c, r));
                     int value = color.getGreen();
                     if (value == CRABBY) {
-                        enemies.add(new Crabby((c + xOffset) * TILES_SIZE, r * TILES_SIZE));
+                        crabbies.add(new Crabby((c + xOffset) * TILES_SIZE, r * TILES_SIZE));
                     }
                 }
             }
             xOffset += imageWidth;
         }
-        return enemies;
+        return crabbies;
     }
 
     public static int[][] GetLevelData(String fileName) {
