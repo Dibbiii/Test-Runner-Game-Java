@@ -6,6 +6,7 @@ import static org.unibo.Game.*;
 import static org.unibo.utils.HelpMethods.*;
 
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D;
 
 public abstract class Enemy extends Entity {
     protected int animationIndex, enemyState, enemyType;
@@ -31,6 +32,9 @@ public abstract class Enemy extends Entity {
 
         maxHealth = GetMaxHealth(enemyType);
         currentHealth = maxHealth;
+
+        maxHealth = GetMaxHealth(enemyType);
+        currentHealth = maxHealth;
     }
 
     public int getAnimationIndex() {
@@ -46,6 +50,7 @@ public abstract class Enemy extends Entity {
     }
 
     protected void changeWalkDirection() {
+        if (walkDirection == LEFT) {
         if (walkDirection == LEFT) {
             walkDirection = RIGHT;
         } else {
@@ -71,12 +76,17 @@ public abstract class Enemy extends Entity {
     protected void firstUpdateCheck(int[][] levelData) {
         if (firstUpdate) {
             if (!isOnGround(hitBox, levelData)) {
+    protected void firstUpdateCheck(int[][] levelData) {
+        if (firstUpdate) {
+            if (!isOnGround(hitBox, levelData)) {
                 isInAir = true;
             }
             firstUpdate = false;
         }
     }
 
+    protected void updateInAir(int[][] levelData) {
+        if (CanMoveHere(hitBox.x, hitBox.y + fallSpeed, hitBox.width, hitBox.height, levelData)) {
     protected void updateInAir(int[][] levelData) {
         if (CanMoveHere(hitBox.x, hitBox.y + fallSpeed, hitBox.width, hitBox.height, levelData)) {
             hitBox.y += fallSpeed;
@@ -87,9 +97,13 @@ public abstract class Enemy extends Entity {
             tileY = (int) (hitBox.y / TILES_SIZE);
         }
     }
+    }
 
     protected void move(int[][] levelData) {
+    protected void move(int[][] levelData) {
         float xStep = 0;
+        if (walkDirection == LEFT) {
+            xStep = -walkSpeed;
         if (walkDirection == LEFT) {
             xStep = -walkSpeed;
         } else {
@@ -97,8 +111,11 @@ public abstract class Enemy extends Entity {
         }
         if (CanMoveHere(hitBox.x + xStep, hitBox.y, hitBox.width, hitBox.height, levelData)) {
             if (isFloor(hitBox, xStep, levelData)) {
+        if (CanMoveHere(hitBox.x + xStep, hitBox.y, hitBox.width, hitBox.height, levelData)) {
+            if (isFloor(hitBox, xStep, levelData)) {
                 hitBox.x += xStep;
                 return;
+            }
             }
         }
         changeWalkDirection();
@@ -131,6 +148,8 @@ public abstract class Enemy extends Entity {
         int absoluteValue = (int) Math.abs(player.hitBox.x - hitBox.x);
         return absoluteValue <= attackDistance * 5;
     }
+        return absoluteValue <= attackDistance * 5;
+    }
 
     protected boolean isPlayerCloseForAttack(Player player) {
         int absoluteValue = (int) Math.abs(player.hitBox.x - hitBox.x);
@@ -143,6 +162,10 @@ public abstract class Enemy extends Entity {
             if (isPlayerInRange(player)) { // the player is in the same row
                 if (IsSightClear(levelData, hitBox, player.hitBox, tileY)) { // there's nothing between the enemy and
                                                                              // the player
+        if (playerTileY == tileY) {
+            if (isPlayerInRange(player)) { // the player is in the same row
+                if (IsSightClear(levelData, hitBox, player.hitBox, tileY)) { // there's nothing between the enemy and
+                                                                             // the player
                     return true;
                 }
             }
@@ -151,6 +174,7 @@ public abstract class Enemy extends Entity {
     }
 
     protected void turnTowardsPlayer(Player player) {
+        if (player.hitBox.x > hitBox.x) {
         if (player.hitBox.x > hitBox.x) {
             walkDirection = RIGHT;
         } else {

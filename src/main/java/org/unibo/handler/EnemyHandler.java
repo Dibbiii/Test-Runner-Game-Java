@@ -5,6 +5,7 @@ import static org.unibo.utils.Constants.EnemyConstants.*;
 
 import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -18,14 +19,19 @@ public class EnemyHandler {
     private Playing playing;
     private BufferedImage[][] enemyArray;
     private ArrayList<Crabby> crabbies = new ArrayList<>();
+    private ArrayList<Crabby> crabbies = new ArrayList<>();
 
     public EnemyHandler(Playing playing) {
         this.playing = playing;
 
         loadEnemyImages();
         spawnCrabbies();
+        spawnCrabbies();
     }
 
+    private void spawnCrabbies() {
+        crabbies = LoadSave.getCrabbies();
+        System.out.println("Crabbies: " + crabbies.size());
     private void spawnCrabbies() {
         crabbies = LoadSave.getCrabbies();
         System.out.println("Crabbies: " + crabbies.size());
@@ -36,6 +42,8 @@ public class EnemyHandler {
         BufferedImage image = LoadSave.GetSpriteAtlas(ENEMY_ATLAS);
         for (int r = 0; r < enemyArray.length; r++) {
             for (int c = 0; c < enemyArray[r].length; c++) {
+                enemyArray[r][c] = image.getSubimage(c * CRABBY_DEFAULT_WIDTH, r * CRABBY_DEFAULT_HEIGHT,
+                        CRABBY_DEFAULT_WIDTH, CRABBY_DEFAULT_HEIGHT);
                 enemyArray[r][c] = image.getSubimage(c * CRABBY_DEFAULT_WIDTH, r * CRABBY_DEFAULT_HEIGHT,
                         CRABBY_DEFAULT_WIDTH, CRABBY_DEFAULT_HEIGHT);
             }
@@ -78,6 +86,7 @@ public class EnemyHandler {
     }
 
     public void render(Graphics g, int xLevelOffSet) {
+        drawCrabs(g, xLevelOffSet);
         drawCrabs(g, xLevelOffSet);
     }
 }

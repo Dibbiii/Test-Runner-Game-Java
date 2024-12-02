@@ -94,6 +94,7 @@ public class Player extends Entity {
                 animIndex = 0;
                 isAttacking = false;
                 attackChecked = false;
+                attackChecked = false;
             }
         }
     }
@@ -151,9 +152,13 @@ public class Player extends Entity {
             xStep -= playerStep;
             flipX = width;
             flipW = -1;
+            flipX = width;
+            flipW = -1;
         }
         if (right) {
             xStep += playerStep;
+            flipX = 0;
+            flipW = 1;
             flipX = 0;
             flipW = 1;
         }

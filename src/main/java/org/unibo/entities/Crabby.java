@@ -22,28 +22,47 @@ public class Crabby extends Enemy {
     private void initAttackBox() {
         attackBox = new Rectangle2D.Float(x, y, 82 * (int) SCALE, 19 * (int) SCALE); // 30 + 30 + 22 = 82
         attackBoxOffsetX = 30 * (int) SCALE;
+        initAttackBox();
+    }
+
+    private void initAttackBox() {
+        attackBox = new Rectangle2D.Float(x, y, 82 * (int) SCALE, 19 * (int) SCALE); // 30 + 30 + 22 = 82
+        attackBoxOffsetX = 30 * (int) SCALE;
     }
 
     private void updateMove(int[][] levelData, Player player) {
         if (firstUpdate) {
             firstUpdateCheck(levelData); // function in the Enemy class
+    private void updateMove(int[][] levelData, Player player) {
+        if (firstUpdate) {
+            firstUpdateCheck(levelData); // function in the Enemy class
         }
+        if (isInAir) {
         if (isInAir) {
             updateInAir(levelData);
         } else {
+            switch (enemyState) {
             switch (enemyState) {
                 case IDLE:
                     newState(RUNNING);
                     break;
                 case RUNNING:
                     if (canSeePlayer(levelData, player)) {
+                    if (canSeePlayer(levelData, player)) {
                         turnTowardsPlayer(player);
                     }
+                    if (isPlayerCloseForAttack(player)) {
                     if (isPlayerCloseForAttack(player)) {
                         newState(ATTACKING);
                     }
                     move(levelData);
                     break;
+                case ATTACKING:
+                    if (animationIndex == 0) {
+                        attackChecked = false;
+                    }
+                    if (animationIndex == 3 && !attackChecked)
+                        checkEnemyHit(attackBox, player);
                 case ATTACKING:
                     if (animationIndex == 0) {
                         attackChecked = false;
