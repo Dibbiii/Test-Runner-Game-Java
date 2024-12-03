@@ -53,11 +53,10 @@ public class LevelHandler {
             }
             currentX += level[0].length;
         }
-
         return fullLevelData;
     }
 
-    public Level getCurrentLevel() {
+    public Level getLevels() {
         return level;
     }
 
@@ -83,7 +82,7 @@ public class LevelHandler {
     }
 
     public void update() {
-
     }
-
 }
+
+// TODO: Add a way to save only the explored wagoons

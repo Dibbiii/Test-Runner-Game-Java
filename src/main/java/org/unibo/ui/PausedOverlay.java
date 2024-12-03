@@ -71,7 +71,6 @@ public class PausedOverlay {
     }
 
     public void mouseClicked(MouseEvent e) {
-        // TODO document why this method is empty
     }
 
     public void mousePressed(MouseEvent e) {

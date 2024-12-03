@@ -3,6 +3,7 @@ package org.unibo.gameStates;
 import static org.unibo.Game.*;
 import static org.unibo.gameStates.GameState.*;
 import static org.unibo.utils.LoadSave.*;
+import static org.unibo.utils.Constants.UI.Buttons.*;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -40,13 +41,15 @@ public class Menu extends State implements StateMethods {
     // TODO: Implement a way to automatically laod buttons at the center of the
     // screen
     private void loadButtons() {
-        // * Continue Game 
-        // ! Dont forget to add Save Button on Pause Menu
-        buttons[0] = new MenuButton(GAME_WIDTH / 2, (int) (130 * SCALE), 0, PLAYING);
-        // * Create New Game
-        buttons[1] = new MenuButton(GAME_WIDTH / 2, (int) (190 * SCALE), 1, PLAYING);
-        buttons[2] = new MenuButton(GAME_WIDTH / 2, (int) (250 * SCALE), 1, OPTIONS);
-        buttons[3] = new MenuButton(GAME_WIDTH / 2, (int) (290 * SCALE), 2, QUIT);
+        int buttonWidth = (int) (BTN_DEFAULT_WIDTH * SCALE);
+        int buttonHeight = (int) (BTN_DEFAULT_HEIGHT * SCALE);
+        int centerX = GAME_WIDTH / 2;
+        int centerY = GAME_HEIGHT / 2 + 100;
+
+        buttons[0] = new MenuButton(centerX, centerY / 2, 0, PLAYING);
+        buttons[1] = new MenuButton(centerX, centerY - 100, 1, PLAYING);
+        buttons[2] = new MenuButton(centerX, centerY - 40, 1, OPTIONS);
+        buttons[3] = new MenuButton(centerX, centerY + 20, 2, QUIT);
     }
 
     @Override

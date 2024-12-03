@@ -39,7 +39,9 @@ public class GameSaves {
         String fileName = "save_" + date_time + ".yaml";
         String date = "created_at: " + date_time + "\n";
         String playerData = String.format(
-                "player: \n name: \"Player\"\n health: %d\n position:\n  x: %.2f\n  y: %.2f\n",
+                "player: \n name: \"Player\"" +
+                        "\n health: %d" +
+                        "\n position:\n  x: %.2f\n  y: %.2f\n",
                 player.getHealth(), player.getHitBox().x, player.getHitBox().y);
         String enemies = "enemies: []\n";
         String content = date + playerData + enemies;
@@ -81,7 +83,7 @@ public class GameSaves {
         for (String line : lines) {
             if (line.contains("x:")) {
                 // * Replace comma with dot for float parsing
-                x = Float.parseFloat(line.split(":")[1].trim().replace(",", ".")); 
+                x = Float.parseFloat(line.split(":")[1].trim().replace(",", "."));
                 System.out.println("x: " + x);
             } else if (line.contains("y:")) {
                 y = Float.parseFloat(line.split(":")[1].trim().replace(",", "."));
@@ -98,3 +100,27 @@ public class GameSaves {
         return y;
     }
 }
+
+/* TODO:
+ * add Spawn Position to the save file
+ * 
+ * spawn:
+ * x: 150.00
+ * y: 150.00
+ */
+
+/*
+ * saves.yaml
+ * 
+ * created_at: 2021-09-30_12-00-00
+ * player:
+ * name: "Player"
+ * health: 100
+ * spawn:
+ * x: 150.00
+ * y: 150.00
+ * position:
+ * x: 150.00
+ * y: 150.00
+ * enemies: []
+ */

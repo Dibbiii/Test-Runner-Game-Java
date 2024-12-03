@@ -3,3 +3,11 @@ options:
  volume: 50
  music: true
  sound: true
+ difficlity: easy
+levels:  [
+  wagoons/1.png
+  wagoons/3.png
+  wagoons/2.png
+  wagoons/4.png
+  wagoons/5.png
+  ]

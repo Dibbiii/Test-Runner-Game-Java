@@ -1,5 +1,7 @@
 package org.unibo;
 
+import static org.unibo.utils.LoadSave.shuffleWagoons;
+
 import java.awt.Graphics;
 
 import org.unibo.gameStates.GameState;

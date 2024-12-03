@@ -42,13 +42,13 @@ public class LoadSave {
     public static final String STATUS_BAR = "ui/health_power_bar.png";
 
     // * Level Map Sprites
-    public static String WAGOON_START = "wagoons/1.png";
+    public static final String WAGOON_START = "wagoons/1.png";
     public static String[] WAGOONS = {
         "wagoons/2.png",
         "wagoons/3.png",
         "wagoons/4.png",
     };
-    public static String WAGOON_END = "wagoons/5.png";
+    public static final String WAGOON_END = "wagoons/5.png";
 
     public static void shuffleWagoons() {
         // Convert the array to a list
